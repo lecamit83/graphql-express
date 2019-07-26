@@ -4,7 +4,7 @@ const db = require('../db.json');
 
 const Book = require('./book.schema');
 const Author = require('./author.schema');
-
+const AuthorServices = require('../services/author.service');
 
 const QueryType = new GraphQLObjectType({
   name : 'Query',
@@ -26,13 +26,22 @@ const QueryType = new GraphQLObjectType({
       type : Author,
       args : { _id : {type : GraphQLID}},
       resolve(source, args, context, info) {
-        return _.find(db.authors, { _id : args._id });
+        try {
+          const _id = args._id;
+          return AuthorServices.getAuthorById(_id);
+        } catch (error) {
+          throw error; 
+        }
       }
     },
     authors : {
       type : new GraphQLList(Author),
       resolve(source, args, context, info) {
-        return db.authors;
+        try {
+          return AuthorServices.getAuthors();
+        } catch (error) {
+          throw error;
+        }
       }
     }
   }

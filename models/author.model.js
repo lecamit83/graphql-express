@@ -11,6 +11,11 @@ const authorSchema = new Schema({
 authorSchema.statics.createAuthor = function ({name, age}) {
   return Author.create({name, age});
 }
+authorSchema.methods.insertBookIntoMySelf = function(bookId) {
+  const author = this;
+  author.books.push(bookId);
+  return author.save();
+}
 
 
 const Author = mongoose.model('Author', authorSchema);

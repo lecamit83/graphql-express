@@ -1,8 +1,9 @@
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLID } = require('graphql');
 
 const AuthorServices = require('../services/author.service');
-
+const BookServices = require('../services/book.service');
 const AuthorType = require('./author.schema');
+const BookType = require('./book.schema');
 const MutationType = new GraphQLObjectType({
   name : 'Mutation',
   fields : {
@@ -17,6 +18,23 @@ const MutationType = new GraphQLObjectType({
           const name = args.name, age = args.age;
           const author = await AuthorServices.createAuthor(name, age);
           return author;
+        } catch (error) {
+          throw error;
+        }
+      }
+    },
+    addBook : {
+      type : BookType,
+      args : {
+        title : { type :  new GraphQLNonNull(GraphQLString) },
+        genre : { type :  new GraphQLNonNull(GraphQLString) },
+        authors : { type :  new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))) },
+      },
+      async resolve(source, args, context, info) {
+        try {
+          const { title, genre, authors } = args;
+          const book = await BookServices.createBook(title, genre, authors);
+          return book;
         } catch (error) {
           throw error;
         }

@@ -1,7 +1,7 @@
 const APIerror = require('../errors/APIerror');
 const { isEmpty, hasAge, formatString } = require('../utils');
 
-function validateInput(name, age) {
+function validateInputAuthor(name, age) {
   if(isEmpty(name) || !hasAge(age)) {
     throw new APIerror('Input Invalid', 400);
   }
@@ -12,5 +12,5 @@ function validateInput(name, age) {
 }
 
 module.exports = {
-  validateInput
+  validateInputAuthor
 }

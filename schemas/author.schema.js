@@ -1,6 +1,10 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLList } = require('graphql');
 const _ = require('lodash');
 const db = require('../db.json');
+
+const BookDAO = require('../models/book.model');
+const AuthorDAO = require('../models/author.model');
+
 const AuthorType = new GraphQLObjectType({
   name : 'Author',
   fields : () => ({
@@ -10,14 +14,7 @@ const AuthorType = new GraphQLObjectType({
     books : {
       type : new GraphQLList(Book),
       resolve(source, args, context, info) {
-        let result = [];
-        for (const bookId of source.books) {
-          let book = _.find(db.books, { _id : bookId});
-          if(book) {
-            result.push(book);
-          }
-        }
-        return result;
+        return BookDAO.find({}).where('_id').in(source.books).exec();
       }
     }
   })

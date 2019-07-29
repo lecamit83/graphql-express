@@ -1,5 +1,8 @@
 const validator = require('validator');
-
+const { ObjectId } = require('mongoose').Types;
+function isID(id) {
+  return ObjectId(id);
+}
 function isEmpty(field) {
   return validator.isEmpty(field) || field.trim().length === 0;
 }
@@ -14,5 +17,7 @@ function formatString(field) {
 module.exports = {
   isEmpty, 
   hasAge,
-  formatString
+  formatString,
+  isID,
+  
 }

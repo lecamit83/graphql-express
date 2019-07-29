@@ -8,5 +8,9 @@ const bookSchema = new Schema({
   authors : [{ type : ObjectId, ref: 'Author'}]
 });
 
+bookSchema.statics.createBook = function({title, genre, authors}) {
+  return Book.create({title, genre, authors});
+}
+
 const Book = mongoose.model('Book', bookSchema);
 module.exports = Book;

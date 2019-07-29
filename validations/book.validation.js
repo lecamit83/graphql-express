@@ -18,7 +18,24 @@ function validateInputBook(title, genre, authors) {
     authors
   }
 }
-
+function validateUpdateBook(id, title, genre) {
+  if(!isID(id) || !isEmpty(title)) {
+    throw new APIerror('Input Invalid', 400);
+  }
+  return {
+    id,
+    title : formatString(title),
+    genre : formatString(genre),
+  }
+}
+function validateID(id) {
+  if(!isID(id)) {
+    throw new APIerror('ID Invalid', 400); 
+  }
+}
 module.exports = {
-  validateInputBook
+  validateInputBook,
+  validateUpdateBook,
+  validateID,
+
 }

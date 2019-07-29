@@ -24,9 +24,45 @@ function getBookById(id) {
 function getBooks() {
   return BookDAO.find({});
 }
+
+async function updateBook(id, title, genre) {
+  try {
+    const updateBook = BookValidator.validateUpdateBook(id, title, genre);
+    const book = await BookDAO.findById(id).orFail(new APIerror('Book Not Found!', 404));
+    // update book information
+    book.title = updateBook.title;
+    book.genre = updateBook.genre;
+
+    await book.save();
+    return book;
+
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteBook(bookId) {
+  try {
+    BookValidator.validateID(bookId);
+    const [book, authors] = await Promise.all([BookDAO.findByIdAndDelete(bookId), AuthorDAO.find({books : bookId}).exec()]);
+    // delete ref BookID out authors
+    const parrallelPromise = authors.map(function (author) {
+      author.books = author.books.filter(function(id){
+        if(id !== bookId) return id;
+      });
+      return author.save();
+    });
+
+    await Promise.all(parrallelPromise);
+
+    return book;
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = {
   createBook,
   getBookById,
   getBooks,
-
+  updateBook,
+  deleteBook,
 }

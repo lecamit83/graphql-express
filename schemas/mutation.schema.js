@@ -39,6 +39,38 @@ const MutationType = new GraphQLObjectType({
           throw error;
         }
       }
+    },
+    updateBook : {
+      type : BookType,
+      args : {
+        _id : { type : new GraphQLNonNull(GraphQLID) },
+        title : { type : new GraphQLNonNull(GraphQLString) },
+        genre : { type : GraphQLString }
+      },
+      async resolve(source, args, context, info) {
+        try {
+          const { _id, title, genre } = args;
+          const book = await BookServices.updateBook(_id, title, genre);
+          return book;
+        } catch (error) {
+          throw error;
+        }
+      }
+    },
+    deleteBook : {
+      type : BookType,
+      args : {
+        _id : { type : new GraphQLNonNull(GraphQLID) }
+      },
+      async resolve(source, args, context, info) {
+        try {
+          const { _id } = args;
+          const book = await BookServices.deleteBook(_id);
+          return book;
+        } catch (error) {
+          throw error;
+        }
+      }
     }
   }
 });

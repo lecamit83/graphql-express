@@ -7,7 +7,7 @@ const Author = require('./author.schema');
 const CursorType = require('./cursor.schema');
 const BookServices = require('../services/book.service');
 const AuthorServices = require('../services/author.service');
-
+const OrderByInput = require('./orderby.schema');
 const QueryType = new GraphQLObjectType({
   name : 'Query',
   fields: {
@@ -23,11 +23,13 @@ const QueryType = new GraphQLObjectType({
       type : new GraphQLList(Book),
       args  : {
         first : {type : GraphQLInt },
-        offset : { type : GraphQLInt }
+        offset : { type : GraphQLInt },
+        field : { type : GraphQLString },
+        order_by : { type : OrderByInput },
       },
       resolve(source, args, context, info) {
-        const { first , offset } = args;
-        return BookServices.getBooks(first, offset);
+        const { first , offset, field, order_by } = args;
+        return BookServices.getBooks(first, offset, field, order_by);
       }
     },
     author : {

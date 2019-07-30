@@ -2,7 +2,7 @@ const BookDAO = require('../models/book.model');
 const AuthorDAO = require('../models/author.model');
 const BookValidator = require('../validations/book.validation');
 const APIerror = require('../errors/APIerror');
-const { pagination } = require('../utils');
+const { pagination, flexibleSort } = require('../utils');
 
 async function createBook(title, genre, authors) {
   try {
@@ -23,9 +23,10 @@ async function createBook(title, genre, authors) {
 function getBookById(id) {
   return BookDAO.findById(id).orFail(new APIerror('Book Not Found!', 404));
 }
-function getBooks(first, offset) {
+function getBooks(first, offset, field, order_by) {
   const paginationOptions = pagination(first, offset);
-  return BookDAO.find({}).setOptions(paginationOptions);
+  const sortOptions = flexibleSort(field, order_by, ['title', 'genre']);
+  return BookDAO.find({}).setOptions(paginationOptions).sort(sortOptions).exec();
 }
 
 async function updateBook(id, title, genre) {

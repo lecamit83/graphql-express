@@ -2,11 +2,13 @@ const BookDAO = require('../models/book.model');
 const AuthorDAO = require('../models/author.model');
 const BookValidator = require('../validations/book.validation');
 const APIerror = require('../errors/APIerror');
+const { pagination } = require('../utils');
 
 async function createBook(title, genre, authors) {
   try {
     const bookInfo = BookValidator.validateInputBook(title, genre, authors);
     const book = await BookDAO.createBook(bookInfo);
+    // find authors has id in array authors[]
     const authorsList = await AuthorDAO.find({}).where('_id').in(authors).exec();
     const bookId = book._id;
     for (const author of authorsList) {
@@ -21,8 +23,9 @@ async function createBook(title, genre, authors) {
 function getBookById(id) {
   return BookDAO.findById(id).orFail(new APIerror('Book Not Found!', 404));
 }
-function getBooks() {
-  return BookDAO.find({});
+function getBooks(first, offset) {
+  const paginationOptions = pagination(first, offset);
+  return BookDAO.find({}).setOptions(paginationOptions);
 }
 
 async function updateBook(id, title, genre) {

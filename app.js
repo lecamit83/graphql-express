@@ -22,14 +22,12 @@ app.use('/graphql', graphQLHTTP({
   schema,
   graphiql : true,
   pretty : true,
-  customFormatErrorFn : (error) => {
-    console.log(error);
-    
+  customFormatErrorFn : (error) => { 
     return {
       message : error.message,
       code : error.code
     }
-  }
+  },
 }));
 
 // Routing RESTful API

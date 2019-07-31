@@ -23,7 +23,7 @@ async function createBook(title, genre, authors) {
 function getBookById(id) {
   return BookDAO.findById(id).orFail(new APIerror('Book Not Found!', 404));
 }
-async function getBooks(first, offset, field, order_by, search) {
+async function getBooks(first, offset, field, order_by, search = '') {
   const regex = new RegExp( search, 'gi' );
   const authors = await AuthorDAO.find({ '$text' : {'$search' : search }});
   const authorIDs = authors.map(author => author._id);

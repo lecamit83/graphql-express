@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv/config');
 const graphQLHTTP = require('express-graphql');
-
+const { isAuth } = require('./middlewares/auth.middleware');
 
 const schema = require('./schemas/root.schema');
 const db = require('./config/db');
@@ -18,8 +18,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 
 // routing GraphQL
-app.use('/graphql', graphQLHTTP({
+app.use('/graphql', graphQLHTTP((req, res)=>({
   schema,
+  context : isAuth(req),
   graphiql : true,
   pretty : true,
   customFormatErrorFn : (error) => { 
@@ -28,7 +29,7 @@ app.use('/graphql', graphQLHTTP({
       code : error.code
     }
   },
-}));
+})));
 
 // Routing RESTful API
 app.get('/', (req, res)=>{

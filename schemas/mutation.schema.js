@@ -19,6 +19,7 @@ const MutationType = new GraphQLObjectType({
       },
       async resolve(source, args, context, info) {
         try {
+          if(!context.isAuth) { throw new APIerror('Unauthorized!', 401); }
           const name = args.name, age = args.age;
           const author = await AuthorServices.createAuthor(name, age);
           return author;
@@ -36,6 +37,7 @@ const MutationType = new GraphQLObjectType({
       },
       async resolve(source, args, context, info) {
         try {
+          if(!context.isAuth) { throw new APIerror('Unauthorized!', 401); }
           const { title, genre, authors } = args;
           const book = await BookServices.createBook(title, genre, authors);
           return book;
@@ -53,6 +55,7 @@ const MutationType = new GraphQLObjectType({
       },
       async resolve(source, args, context, info) {
         try {
+          if(!context.isAuth) { throw new APIerror('Unauthorized!', 401); }
           const { _id, title, genre } = args;
           const book = await BookServices.updateBook(_id, title, genre);
           return book;
@@ -68,6 +71,7 @@ const MutationType = new GraphQLObjectType({
       },
       async resolve(source, args, context, info) {
         try {
+          if(!context.isAuth) { throw new APIerror('Unauthorized!', 401); }
           const { _id } = args;
           const book = await BookServices.deleteBook(_id);
           return book;

@@ -57,9 +57,7 @@ function flexibleSearch(search, mainConditions = [], fields = []) {
   if(search) {
     let _orCondition = { '$or' : []}
     _orCondition['$or'].push({ '$text' : {'$search' : search }});
-    fields.forEach(field => {
-      console.log(field);
-      
+    fields.forEach(field => { 
       _orCondition['$or'].push(field);
     });
     condition['$and'].push(_orCondition);

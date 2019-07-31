@@ -26,10 +26,11 @@ const QueryType = new GraphQLObjectType({
         offset : { type : GraphQLInt },
         field : { type : GraphQLString },
         order_by : { type : OrderByInput },
+        search : { type : GraphQLString },
       },
       resolve(source, args, context, info) {
-        const { first , offset, field, order_by } = args;
-        return BookServices.getBooks(first, offset, field, order_by);
+        const { first , offset, field, order_by, search } = args;
+        return BookServices.getBooks(first, offset, field, order_by, search);
       }
     },
     author : {

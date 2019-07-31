@@ -17,6 +17,7 @@ authorSchema.methods.insertBookIntoMySelf = function(bookId) {
   return author.save();
 }
 
+authorSchema.index({ name : 'text' });
 
 const Author = mongoose.model('Author', authorSchema);
 module.exports = Author;

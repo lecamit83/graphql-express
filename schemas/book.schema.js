@@ -14,7 +14,7 @@ const BookType = new GraphQLObjectType({
     genre : { type : GraphQLString },
     authors : {
       type : new GraphQLList(new GraphQLNonNull(Author)),
-      resolve(source, args, context, info) {
+      resolve(source, args, context, info) {  
         return AuthorDAO.find({}).where('_id').in(source.authors).exec();
       }
     }

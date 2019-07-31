@@ -41,12 +41,24 @@ function flexibleSort(field, order, sortableFields = []){
     if(order !== ASCENDING && order !== DESCENDING) {
       throw new APIError('OrderBy Invalid!' , 422);
     }
-  
     options[field] = order;
-    
   }
-  
   return options;
+}
+
+function flexibleSearch(search, mainConditions = [], fields = []) {
+  let condition = { '$and' : mainConditions};
+  if(search) {
+    let _orCondition = { '$or' : []}
+    _orCondition['$or'].push({ '$text' : {'$search' : search }});
+    fields.forEach(field => {
+      console.log(field);
+      
+      _orCondition['$or'].push(field);
+    });
+    condition['$and'].push(_orCondition);
+  }
+  return condition;
 }
 
 module.exports = {
@@ -56,5 +68,6 @@ module.exports = {
   isID,
   pagination,
   flexibleSort,
+  flexibleSearch,
 
 }

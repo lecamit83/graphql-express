@@ -2,8 +2,12 @@ const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt, GraphQLLis
 
 const AuthorServices = require('../services/author.service');
 const BookServices = require('../services/book.service');
+const UserServices = require('../services/user.service');
+
 const AuthorType = require('./author.schema');
 const BookType = require('./book.schema');
+const { UserType, LogginedUserType } = require('./user.schema');
+
 const MutationType = new GraphQLObjectType({
   name : 'Mutation',
   fields : {
@@ -67,6 +71,36 @@ const MutationType = new GraphQLObjectType({
           const { _id } = args;
           const book = await BookServices.deleteBook(_id);
           return book;
+        } catch (error) {
+          throw error;
+        }
+      }
+    },
+    register : {
+      type : UserType,
+      args : {
+        email : { type : new GraphQLNonNull(GraphQLString) },
+        password : { type : new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(source, args, context, info) {
+        try {
+          const { email, password } = args;
+          return UserServices.createUser(email, password);
+        } catch (error) {
+          throw error;
+        }
+      }
+    },
+    loggined : {
+      type : LogginedUserType,
+      args : {
+        email : { type : new GraphQLNonNull(GraphQLString) },
+        password : { type : new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(source, args, context, info) {
+        try {
+          const { email, password } = args;
+          return UserServices.loginUser(email, password);
         } catch (error) {
           throw error;
         }

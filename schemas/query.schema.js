@@ -5,9 +5,11 @@ const db = require('../db.json');
 const Book = require('./book.schema');
 const Author = require('./author.schema');
 const CursorType = require('./cursor.schema');
+const OrderByInput = require('./orderby.schema');
+
 const BookServices = require('../services/book.service');
 const AuthorServices = require('../services/author.service');
-const OrderByInput = require('./orderby.schema');
+
 const QueryType = new GraphQLObjectType({
   name : 'Query',
   fields: {
@@ -51,7 +53,7 @@ const QueryType = new GraphQLObjectType({
         const { first, after } = args;
         return AuthorServices.getAuthors(first, after);   
       }
-    }
+    },
   }
 });
 

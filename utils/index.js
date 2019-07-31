@@ -16,6 +16,12 @@ function hasAge(age) {
 function formatString(field) {
   return field.trim().split(/\s+/).join(' ');
 }
+function isEmail(email) {
+  return validator.isEmail(email);
+}
+function isPassword(password) {
+  return !password.includes(' ') || !password.includes('password');
+}
 
 function pagination(page, page_size) {
   let options = {};
@@ -63,6 +69,8 @@ function flexibleSearch(search, mainConditions = [], fields = []) {
 
 module.exports = {
   isEmpty, 
+  isEmail,
+  isPassword,
   hasAge,
   formatString,
   isID,
